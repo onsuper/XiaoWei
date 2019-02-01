@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("Xiaowei")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("微信小微商户API")]
+[assembly: AssemblyDescription("https://blog.csdn.net/playis/article/details/82807885")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Xiaowei")]
+[assembly: AssemblyProduct("wuling")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
