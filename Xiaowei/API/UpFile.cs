@@ -10,7 +10,10 @@ using Xiaowei.Model;
 
 namespace Xiaowei.API
 {
-   public class UpFile
+    /// <summary>
+    /// 图片上传业务
+    /// </summary>
+    public class UpFile
     {
         /// <summary>
         /// 上传图片或文件 不能大于2M

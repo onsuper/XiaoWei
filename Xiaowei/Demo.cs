@@ -6,25 +6,37 @@ using System.Threading.Tasks;
 
 namespace Xiaowei
 {
-   public class Demo
+    public class Demo
     {
+        /// <summary>
+        /// 控制台测试入口
+        /// </summary>
         static void Main()
         {
             Console.WriteLine(API.XiaoWei.InfoEncryption("123"));
-            Console.ReadLine(); 
+            Console.ReadLine();
 
         }
 
         /// <summary>
-        /// 配置参数
+        /// DEMO
         /// </summary>
         public string DemoSubmit()
         {
+
+            //WxPayAPI.dll是用提官方dll 可自行下载c#编译源码
+            //如果遇到技术问题进群沟通 
+            //QQ群:771207642
+            //https://pay.weixin.qq.com/wiki/doc/api/micropay_sl.php?chapter=11_1
+
             Lib.Config.MchId = "商户号";
             Lib.Config.CertPath = "";
             Lib.Config.CertPwd = "";
             Lib.Config.Serial_no = "";
 
+
+
+            //使用前先配置上面的参数
             WxPayAPI.WxPayData inputObj = new WxPayAPI.WxPayData();
 
             inputObj.SetValue("business_code", ""); // //业务申请编号
@@ -61,7 +73,7 @@ namespace Xiaowei
             inputObj.SetValue("contact", ("")); // //联系人姓名
             inputObj.SetValue("contact_phone", ("")); // //手机号码
 
-            string result=API.XiaoWei.Submit(inputObj);
+            string result = API.XiaoWei.Submit(inputObj);
             return result;
         }
 

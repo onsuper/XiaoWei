@@ -27,7 +27,7 @@ namespace Xiaowei.Lib
         public static string Serial_no = "";
 
         /// <summary>
-        /// 证书文件路径
+        /// 证书文件绝对路径
         /// </summary>
         public static string CertPath = "";
 
@@ -39,6 +39,6 @@ namespace Xiaowei.Lib
         /// <summary>
         /// 证书密钥
         /// </summary>
-        public static string CertKey = "asfa5sdf1a23sdf1a6sd4f6as1df23as";
+        public static string CertKey = "";
     }
 }

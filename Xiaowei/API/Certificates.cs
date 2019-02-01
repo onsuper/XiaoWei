@@ -35,7 +35,7 @@ namespace Xiaowei.API
 
 
             string signature = SHA256WithRSA.RSA(signContent,
-                                "证书文件.p12", Config.MchId);
+                                Config.CertPath, Config.MchId);
 
             string Authorization = "WECHATPAY2-SHA256-RSA2048 " +
                                 "mchid=\"" + Config.MchId + "\"," +
