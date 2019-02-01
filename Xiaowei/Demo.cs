@@ -8,6 +8,13 @@ namespace Xiaowei
 {
    public class Demo
     {
+        static void Main()
+        {
+            Console.WriteLine(API.XiaoWei.InfoEncryption("123"));
+            Console.ReadLine(); 
+
+        }
+
         /// <summary>
         /// 配置参数
         /// </summary>

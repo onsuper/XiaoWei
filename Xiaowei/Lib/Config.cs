@@ -35,5 +35,10 @@ namespace Xiaowei.Lib
         /// 证书密钥
         /// </summary>
         public static string CertPwd = "";
+
+        /// <summary>
+        /// 证书密钥
+        /// </summary>
+        public static string CertKey = "asfa5sdf1a23sdf1a6sd4f6as1df23as";
     }
 }

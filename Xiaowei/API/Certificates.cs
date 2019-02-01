@@ -70,5 +70,14 @@ namespace Xiaowei.API
             return dc;
 
         }
+
+        public static data_certificates Dc()
+        {
+            string file = "D:\\Desktop\\wxpay_xiaowei\\new.json";
+            string Authorization = System.IO.File.ReadAllText(file);
+            data_certificates dc = JsonMapper.ToObject<data_certificates>(Authorization);
+            return dc;
+
+        }
     }
 }

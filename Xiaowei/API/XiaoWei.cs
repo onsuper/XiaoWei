@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using WxPayAPI;
@@ -58,26 +60,97 @@ namespace Xiaowei.API
         }
 
         /// <summary>
+        /// 加密敏感信息，传入明文和从微信支付获取到的敏感信息加密公钥，事先使用OpenSSL转换cert.pem文件输出为der文件
+        /// https://pay.weixin.qq.com/wiki/doc/api/xiaowei.php?chapter=19_12
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="publicKeyBase64"></param>
+        /// <returns></returns>
+        public static string Encrypt(string text, byte[] publicKeyDER)
+        {
+            var x509 = new X509Certificate2(publicKeyDER);
+            RSACryptoServiceProvider rsa = (RSACryptoServiceProvider)x509.PublicKey.Key;
+
+            var buff = rsa.Encrypt(Encoding.UTF8.GetBytes(text), false);
+
+            return Convert.ToBase64String(buff);
+        }
+
+        /// <summary>
+        /// AEAD_AES_256_GCM的解密  官方提供
+        /// https://pay.weixin.qq.com/wiki/doc/api/xiaowei.php?chapter=19_11
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="key"></param>
+        /// <param name="ivs"></param>
+        /// <returns></returns>
+        public static string AesGcmDecrypt(string content, string key, string ivs)
+        {
+            return null;
+            //byte[] bytes = Encoding.UTF8.GetBytes(key);
+            //byte[] bytes2 = Encoding.UTF8.GetBytes(ivs);
+            //byte[] array = Convert.FromBase64String(content);
+            //byte[] bytes3 = Encoding.UTF8.GetBytes("certificate");
+            //GcmBlockCipher gcmBlockCipher = new GcmBlockCipher(new AesEngine());
+            //AeadParameters aeadParameters = new AeadParameters(new KeyParameter(bytes), 128, bytes2, bytes3);
+            //gcmBlockCipher.Init(false, aeadParameters);
+            //byte[] array2 = new byte[gcmBlockCipher.GetOutputSize(array.Length)];
+            //int num = gcmBlockCipher.ProcessBytes(array, 0, array.Length, array2, 0);
+
+            //gcmBlockCipher.DoFinal(array2, num);
+
+            //return Encoding.UTF8.GetString(array2);
+        }
+
+        /// <summary>
         /// 敏感信息加密
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
         public static string InfoEncryption(string s)
         {
-            string ciphertext = Certificates.Get().data.FirstOrDefault().encrypt_certificate.ciphertext;
-            string associated_data = Certificates.Get().data.FirstOrDefault().encrypt_certificate.associated_data;
-            string nonce_dc = Certificates.Get().data.FirstOrDefault().encrypt_certificate.nonce;
+            //string ciphertext = Certificates.Get().data.FirstOrDefault().encrypt_certificate.ciphertext;
+            //string associated_data = Certificates.Get().data.FirstOrDefault().encrypt_certificate.associated_data;
+            //string nonce_dc = Certificates.Get().data.FirstOrDefault().encrypt_certificate.nonce;
+
+            string ciphertext = Certificates.Dc().data.FirstOrDefault().encrypt_certificate.ciphertext;
+            string associated_data = Certificates.Dc().data.FirstOrDefault().encrypt_certificate.associated_data;
+            string nonce_dc = Certificates.Dc().data.FirstOrDefault().encrypt_certificate.nonce;
+
+            string key = "asfa5sdf1a23sdf1a6sd4f6as1df23as";
+            byte[] nsec = Convert.FromBase64String(ciphertext);
+            byte[] byteArray = Lib.libsodium.Decrypt(
+                     nsec,
+                     System.Text.Encoding.UTF8.GetBytes(nonce_dc),
+                     System.Text.Encoding.UTF8.GetBytes(key),
+                     System.Text.Encoding.UTF8.GetBytes(associated_data));
+            //string TKey = System.Text.Encoding.Default.GetString(byteArray);
+
+            return Encrypt(s, byteArray);
+
+
+            //crypto_aead_aes256gcm_decrypt
+            //byte[] text = Sodium.SecretAeadAes.Decrypt(
+            //            nsec,
+            //            System.Text.Encoding.Default.GetBytes(nonce_dc),
+            //            System.Text.Encoding.Default.GetBytes(key),
+            //            System.Text.Encoding.UTF8.GetBytes(associated_data));
+
+
+            //Lib.RSACryptoService cryptoService = new Lib.RSACryptoService(TKey);
+            //return cryptoService.Encrypt(s);
+
 
             //通过处理数据加密,暂时通过php7实现
-            string url = "http://localhost/info.php";
-            MsMultiPartFormData form = new MsMultiPartFormData();
-            form.AddFormField("ciphertext", ciphertext);
-            form.AddFormField("associated_data", associated_data);
-            form.AddFormField("nonce", nonce_dc);
-            form.AddFormField("string", s);//签名
+            //string url = "http://localhost/info.php";
+            //MsMultiPartFormData form = new MsMultiPartFormData();
+            //form.AddFormField("ciphertext", ciphertext);
+            //form.AddFormField("associated_data", associated_data);
+            //form.AddFormField("nonce", nonce_dc);
+            //form.AddFormField("string", s);//签名
 
-            string rst = Lib.HttpService.Post("", url, form, true, 10);
-            return rst;
+            //string rst = Lib.HttpService.Post("", url, form, true, 10);
+            //return rst;
         }
 
         /// <summary>
